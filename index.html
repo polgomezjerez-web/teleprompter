@@ -28,7 +28,7 @@
       color: #fff;
     }
 
-    /* Contenedor de cámara a pantalla completa */
+    /* Vista de Cámara */
     #camera-container {
       position: absolute;
       top: 0;
@@ -36,46 +36,46 @@
       width: 100%;
       height: 100%;
       z-index: 1;
-      background: #050505;
+      background: #000;
       overflow: hidden;
     }
     #preview-video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scaleX(-1); /* Efecto espejo natural para selfie */
+      transform: scaleX(-1);
     }
 
-    /* Franja del Teleprompter en la parte superior (debajo del notch/dynamic island) */
+    /* Caja de Teleprompter superior (debajo de la cámara frontal / Dynamic Island) */
     #prompter-wrapper {
       position: absolute;
-      top: calc(env(safe-area-inset-top, 24px) + 20px);
-      left: 12px;
-      right: 12px;
+      top: calc(env(safe-area-inset-top, 24px) + 24px);
+      left: 14px;
+      right: 14px;
       height: 220px;
       z-index: 10;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border-radius: 22px;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    /* Línea guía de lectura en el centro del prompter */
+    /* Guía de lectura en el centro */
     .reading-guide {
       position: absolute;
       top: 50%;
       left: 0;
       right: 0;
-      height: 44px;
+      height: 48px;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.08);
-      border-top: 1px dashed rgba(255, 215, 0, 0.4);
-      border-bottom: 1px dashed rgba(255, 215, 0, 0.4);
+      background: rgba(255, 255, 255, 0.07);
+      border-top: 1px dashed rgba(255, 215, 0, 0.45);
+      border-bottom: 1px dashed rgba(255, 215, 0, 0.45);
       pointer-events: none;
       z-index: 2;
     }
@@ -84,10 +84,12 @@
       width: 100%;
       height: 100%;
       overflow-y: scroll;
-      padding: 85px 20px 100px 20px;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+      padding: 85px 22px 140px 22px;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 78%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 78%, transparent 100%);
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      cursor: pointer;
     }
     #prompter-scroll-box::-webkit-scrollbar {
       display: none;
@@ -95,44 +97,35 @@
 
     #prompter-text {
       font-size: 24px;
-      line-height: 1.45;
+      line-height: 1.5;
       font-weight: 600;
       color: #ffffff;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.95);
       text-align: center;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    /* Cuenta atrás */
-    #countdown-overlay {
+    /* Cartel de Pausa flotante sobre el prompter */
+    #pause-badge {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 50;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 149, 0, 0.9);
+      color: #000;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      z-index: 15;
       display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-    #countdown-number {
-      font-size: 130px;
-      font-weight: 900;
-      color: #ff3b30;
-      text-shadow: 0 0 40px rgba(255, 59, 48, 0.8);
-      animation: pulseCount 0.9s infinite alternate;
-    }
-    @keyframes pulseCount {
-      0% { transform: scale(0.9); opacity: 0.8; }
-      100% { transform: scale(1.15); opacity: 1; }
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      pointer-events: none;
     }
 
-    /* Barra superior de estado (Grabando...) */
+    /* Estado de grabación (Barra superior) */
     #recording-indicator {
       position: absolute;
       top: env(safe-area-inset-top, 16px);
@@ -142,14 +135,14 @@
       display: none;
       align-items: center;
       gap: 8px;
-      background: rgba(20, 20, 20, 0.85);
-      border: 1px solid rgba(255, 59, 48, 0.5);
-      padding: 6px 14px;
+      background: rgba(18, 18, 18, 0.9);
+      border: 1px solid rgba(255, 59, 48, 0.6);
+      padding: 6px 16px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(255, 59, 48, 0.3);
     }
     .red-dot {
       width: 10px;
@@ -164,44 +157,44 @@
       50% { opacity: 0.2; }
     }
 
-    /* Barra inferior de controles */
+    /* Controles Inferiores */
     #bottom-controls {
       position: absolute;
-      bottom: calc(env(safe-area-inset-bottom, 20px) + 15px);
+      bottom: calc(env(safe-area-inset-bottom, 20px) + 12px);
       left: 0;
       width: 100%;
-      padding: 0 24px;
+      padding: 0 20px;
       z-index: 20;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-around;
     }
 
     .btn-circle {
-      width: 52px;
-      height: 52px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: rgba(30, 30, 30, 0.75);
+      background: rgba(28, 28, 30, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: transform 0.12s ease;
     }
     .btn-circle:active {
-      transform: scale(0.92);
-      background: rgba(60, 60, 60, 0.9);
+      transform: scale(0.9);
+      background: rgba(50, 50, 50, 0.9);
     }
 
     /* Botón gigante de grabar */
     #record-btn {
-      width: 76px;
-      height: 76px;
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
       border: 4px solid #ffffff;
       background: transparent;
@@ -212,20 +205,100 @@
       position: relative;
     }
     #record-btn-inner {
-      width: 60px;
-      height: 60px;
+      width: 58px;
+      height: 58px;
       border-radius: 50%;
       background: #ff3b30;
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #record-btn.recording #record-btn-inner {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 6px;
       background: #ff3b30;
     }
 
-    /* Modal para editar el guion */
+    /* Cuenta atrás */
+    #countdown-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 50;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #countdown-number {
+      font-size: 120px;
+      font-weight: 900;
+      color: #ff3b30;
+      text-shadow: 0 0 40px rgba(255, 59, 48, 0.8);
+      animation: pulseCount 0.9s infinite alternate;
+    }
+    @keyframes pulseCount {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.15); opacity: 1; }
+    }
+
+    /* Panel de Ajustes Rápidos */
+    #quick-settings {
+      position: absolute;
+      bottom: calc(env(safe-area-inset-bottom, 20px) + 85px);
+      left: 16px;
+      right: 16px;
+      background: rgba(22, 22, 24, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      padding: 18px 20px;
+      z-index: 25;
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+    .setting-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #eee;
+    }
+    .setting-row input[type="range"] {
+      flex: 1;
+      height: 6px;
+      accent-color: #007aff;
+      border-radius: 3px;
+    }
+    .btn-test-scroll {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Modal de Edición de Guion */
     .modal {
       position: absolute;
       top: 0;
@@ -233,18 +306,18 @@
       width: 100%;
       height: 100%;
       z-index: 100;
-      background: rgba(0, 0, 0, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10, 10, 12, 0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       display: none;
       flex-direction: column;
-      padding: calc(env(safe-area-inset-top, 20px) + 16px) 20px calc(env(safe-area-inset-bottom, 20px) + 16px) 20px;
+      padding: calc(env(safe-area-inset-top, 20px) + 16px) 18px calc(env(safe-area-inset-bottom, 20px) + 16px) 18px;
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .modal-title {
       font-size: 19px;
@@ -268,7 +341,7 @@
       border-radius: 16px;
       padding: 16px;
       color: #fff;
-      font-size: 18px;
+      font-size: 17px;
       line-height: 1.5;
       resize: none;
       font-family: inherit;
@@ -279,38 +352,7 @@
       border-color: #007aff;
     }
 
-    /* Panel de Ajustes Rápidos (Velocidad y Tamaño) */
-    #quick-settings {
-      position: absolute;
-      bottom: calc(env(safe-area-inset-bottom, 20px) + 95px);
-      left: 16px;
-      right: 16px;
-      background: rgba(20, 20, 20, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 18px;
-      padding: 16px;
-      z-index: 20;
-      display: none;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .setting-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #ccc;
-    }
-    .setting-row input[type="range"] {
-      flex: 1;
-      accent-color: #007aff;
-    }
-
-    /* Modal de resultado y previsualización */
+    /* Modal de Resultado (Vídeo Grabado) - CERO CONFIRMATIONS, CIERRE DIRECTO */
     #result-modal {
       display: none;
       position: absolute;
@@ -321,15 +363,31 @@
       background: #000;
       z-index: 200;
       flex-direction: column;
-      padding: calc(env(safe-area-inset-top, 20px) + 10px) 16px calc(env(safe-area-inset-bottom, 20px) + 16px) 16px;
+      padding: calc(env(safe-area-inset-top, 20px) + 12px) 18px calc(env(safe-area-inset-bottom, 20px) + 16px) 18px;
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .btn-close-result {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
     }
     #result-video {
       width: 100%;
       flex: 1;
-      border-radius: 16px;
+      border-radius: 18px;
       background: #111;
       object-fit: contain;
-      margin: 12px 0 20px 0;
+      margin-bottom: 16px;
     }
     .result-actions {
       display: flex;
@@ -337,7 +395,7 @@
     }
     .btn-action {
       flex: 1;
-      padding: 15px;
+      padding: 16px;
       border-radius: 14px;
       font-size: 16px;
       font-weight: 700;
@@ -351,35 +409,38 @@
     .btn-save {
       background: #34c759;
       color: #fff;
+      flex: 1.4;
     }
     .btn-discard {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.16);
       color: #fff;
+      flex: 1;
     }
 
-    /* Mensaje de bienvenida/instrucciones */
+    /* Toast */
     #toast-msg {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(15, 15, 15, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 12px 20px;
-      border-radius: 20px;
+      padding: 12px 22px;
+      border-radius: 25px;
       font-size: 14px;
       font-weight: 600;
-      z-index: 30;
+      z-index: 80;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.25s ease;
       text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
   </style>
 </head>
 <body>
 
-  <!-- Contenedor de cámara -->
+  <!-- Vista Cámara -->
   <div id="camera-container">
     <video id="preview-video" autoplay playsinline muted></video>
   </div>
@@ -390,45 +451,53 @@
     <span id="recording-time">00:00</span>
   </div>
 
-  <!-- Teleprompter (pegado arriba junto a la lente) -->
+  <!-- Teleprompter pegado arriba bajo la cámara -->
   <div id="prompter-wrapper">
     <div class="reading-guide"></div>
+    <div id="pause-badge">⏸️ PAUSADO</div>
     <div id="prompter-scroll-box">
       <div id="prompter-text">Pega tu guion pulsando el botón 📝 de abajo.
 
-Cuando pulses el botón rojo de grabar, habrá una cuenta atrás de 3 segundos y el texto comenzará a desplazarse solo a la velocidad que hayas configurado.
+Cuando pulses el botón rojo de grabar, habrá una cuenta atrás de 3 segundos y el texto comenzará a desplazarse solo a ritmo de lectura natural.
 
-El texto está colocado aquí arriba justo para que tus ojos apunten directamente a la cámara frontal del móvil y no se note que estás leyendo.</div>
+Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
     </div>
   </div>
 
   <!-- Panel de ajustes rápidos -->
   <div id="quick-settings">
+    <div class="setting-title">Ajustes de lectura</div>
     <div class="setting-row">
       <span>Velocidad:</span>
-      <input type="range" id="speed-slider" min="1" max="10" value="4">
-      <span id="speed-val">4</span>
+      <input type="range" id="speed-slider" min="1" max="10" step="1" value="2">
+      <span id="speed-val" style="min-width: 45px; text-align: right; font-weight: 700;">2</span>
     </div>
     <div class="setting-row">
-      <span>Tamaño:</span>
-      <input type="range" id="size-slider" min="16" max="38" value="24">
-      <span id="size-val">24px</span>
+      <span>Tamaño letra:</span>
+      <input type="range" id="size-slider" min="16" max="36" step="2" value="22">
+      <span id="size-val" style="min-width: 45px; text-align: right; font-weight: 700;">22px</span>
     </div>
+    <button class="btn-test-scroll" id="btn-toggle-test-scroll">▶️ Probar desplazamiento sin grabar</button>
   </div>
 
   <!-- Controles inferiores -->
   <div id="bottom-controls">
-    <!-- Botón de Editar Guion -->
+    <!-- Editar Guion -->
     <button class="btn-circle" id="btn-edit-script" title="Editar Guion">
       📝
     </button>
 
-    <!-- Botón de Grabación -->
+    <!-- Rebobinar al inicio -->
+    <button class="btn-circle" id="btn-rewind" title="Volver al inicio">
+      ⏮️
+    </button>
+
+    <!-- Botón Principal Grabar -->
     <button id="record-btn" title="Grabar">
       <div id="record-btn-inner"></div>
     </button>
 
-    <!-- Botón de Ajustes -->
+    <!-- Ajustes -->
     <button class="btn-circle" id="btn-toggle-settings" title="Ajustes">
       ⚙️
     </button>
@@ -437,10 +506,10 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
   <!-- Modal de Edición de Guion -->
   <div class="modal" id="modal-script">
     <div class="modal-header">
-      <span class="modal-title">Tu Guion / Texto</span>
-      <button class="btn-done" id="btn-save-script">Listo</button>
+      <span class="modal-title">Tu Guion</span>
+      <button class="btn-done" id="btn-save-script">Guardar</button>
     </div>
-    <textarea id="script-editor" placeholder="Pega aquí el texto que quieres leer..."></textarea>
+    <textarea id="script-editor" placeholder="Pega aquí el texto que vas a leer..."></textarea>
   </div>
 
   <!-- Cuenta atrás -->
@@ -448,17 +517,20 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
     <div id="countdown-number">3</div>
   </div>
 
-  <!-- Modal de resultado / Guardar en el Carrete -->
+  <!-- Modal de Resultado / Guardar en el Carrete -->
   <div id="result-modal">
-    <h2 style="font-size: 20px; font-weight: 700; text-align: center; margin-top: 8px;">Vídeo Grabado</h2>
+    <div class="result-header">
+      <span style="font-size: 18px; font-weight: 700;">Vídeo Grabado</span>
+      <button class="btn-close-result" id="btn-close-result-x">✕</button>
+    </div>
     <video id="result-video" controls playsinline></video>
     <div class="result-actions">
-      <button class="btn-action btn-discard" id="btn-discard-video">Descartar</button>
-      <button class="btn-action btn-save" id="btn-save-video">📲 Guardar Vídeo</button>
+      <button class="btn-action btn-discard" id="btn-discard-video">🔄 Repetir Toma</button>
+      <button class="btn-action btn-save" id="btn-save-video">📲 Guardar en Fotos</button>
     </div>
   </div>
 
-  <!-- Notificación Toast -->
+  <!-- Mensajes Toast -->
   <div id="toast-msg">Mensaje</div>
 
   <script>
@@ -466,6 +538,7 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
     const previewVideo = document.getElementById('preview-video');
     const prompterBox = document.getElementById('prompter-scroll-box');
     const prompterText = document.getElementById('prompter-text');
+    const pauseBadge = document.getElementById('pause-badge');
     const recordBtn = document.getElementById('record-btn');
     const recordingIndicator = document.getElementById('recording-indicator');
     const recordingTimeText = document.getElementById('recording-time');
@@ -475,32 +548,49 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
     const scriptEditor = document.getElementById('script-editor');
     const btnEditScript = document.getElementById('btn-edit-script');
     const btnSaveScript = document.getElementById('btn-save-script');
+    const btnRewind = document.getElementById('btn-rewind');
     const quickSettings = document.getElementById('quick-settings');
     const btnToggleSettings = document.getElementById('btn-toggle-settings');
     const speedSlider = document.getElementById('speed-slider');
     const speedVal = document.getElementById('speed-val');
     const sizeSlider = document.getElementById('size-slider');
     const sizeVal = document.getElementById('size-val');
+    const btnTestScroll = document.getElementById('btn-toggle-test-scroll');
     const resultModal = document.getElementById('result-modal');
     const resultVideo = document.getElementById('result-video');
     const btnSaveVideo = document.getElementById('btn-save-video');
     const btnDiscardVideo = document.getElementById('btn-discard-video');
+    const btnCloseResultX = document.getElementById('btn-close-result-x');
     const toast = document.getElementById('toast-msg');
+
+    // Mapeo de velocidad en píxeles por segundo (Cálculo Delta Time exacto e inmune a los 120Hz de ProMotion)
+    // Nivel 1: ~14 px/s (muy lento)
+    // Nivel 2: ~24 px/s (lectura tranquila y natural - NUEVO POR DEFECTO)
+    // Nivel 3: ~34 px/s (ritmo estándar)
+    // Nivel 5: ~56 px/s
+    // Nivel 10: ~110 px/s
+    function getSpeedPixelsPerSec(level) {
+      const l = parseFloat(level);
+      return 8 + (l * 9.5);
+    }
 
     // Estados
     let mediaStream = null;
     let mediaRecorder = null;
     let recordedChunks = [];
     let isRecording = false;
+    let isTestingScroll = false;
     let isPaused = false;
-    let scrollInterval = null;
     let timerInterval = null;
     let recordingSeconds = 0;
     let recordedBlob = null;
     let recordedVideoUrl = null;
     let selectedMimeType = '';
+    let scrollPos = 0;
+    let lastAnimTimestamp = null;
+    let animFrameId = null;
 
-    // Cargar guion y preferencias guardadas
+    // Cargar preferencias guardadas
     const savedScript = localStorage.getItem('teleprompter_script');
     if (savedScript) {
       prompterText.innerText = savedScript;
@@ -509,14 +599,22 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
       scriptEditor.value = prompterText.innerText;
     }
 
-    const savedSpeed = localStorage.getItem('teleprompter_speed') || 4;
+    // Por defecto velocidad 2 (tranquila y legible)
+    const savedSpeed = localStorage.getItem('teleprompter_speed') || 2;
     speedSlider.value = savedSpeed;
     speedVal.innerText = savedSpeed;
 
-    const savedSize = localStorage.getItem('teleprompter_size') || 24;
+    const savedSize = localStorage.getItem('teleprompter_size') || 22;
     sizeSlider.value = savedSize;
     sizeVal.innerText = `${savedSize}px`;
     prompterText.style.fontSize = `${savedSize}px`;
+
+    // Sincronizar scroll manual táctil
+    prompterBox.addEventListener('scroll', () => {
+      if (!isRecording && !isTestingScroll) {
+        scrollPos = prompterBox.scrollTop;
+      }
+    });
 
     // Iniciar cámara frontal
     async function initCamera() {
@@ -535,30 +633,85 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
         mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         previewVideo.srcObject = mediaStream;
       } catch (err) {
-        console.error('Error accediendo a la cámara:', err);
-        showToast('⚠️ Permite el acceso a la cámara y micrófono');
+        console.error('Error cámara:', err);
+        showToast('⚠️ Permite acceso a la cámara y micrófono');
       }
     }
     initCamera();
 
-    // Auto-scroll fluido usando requestAnimationFrame
-    let scrollPos = 0;
-    let scrollSpeed = parseFloat(savedSpeed) * 0.45;
-
-    function startAutoScroll() {
-      scrollPos = prompterBox.scrollTop;
-      function step() {
-        if (!isRecording) return;
-        if (!isPaused) {
-          scrollPos += scrollSpeed;
-          prompterBox.scrollTop = scrollPos;
-        }
-        requestAnimationFrame(step);
+    // Loop de auto-scroll basado en Delta Time (ignora los 120Hz del iPhone para que no vuele)
+    function runAutoScroll(timestamp) {
+      if (!isRecording && !isTestingScroll) {
+        lastAnimTimestamp = null;
+        return;
       }
-      requestAnimationFrame(step);
+
+      if (!lastAnimTimestamp) {
+        lastAnimTimestamp = timestamp;
+      }
+
+      const dt = (timestamp - lastAnimTimestamp) / 1000; // segundos transcurridos
+      lastAnimTimestamp = timestamp;
+
+      if (!isPaused && dt > 0 && dt < 0.2) { // salvaguarda contra tirones
+        const pixelsPerSecond = getSpeedPixelsPerSec(speedSlider.value);
+        scrollPos += pixelsPerSecond * dt;
+        prompterBox.scrollTop = scrollPos;
+      }
+
+      animFrameId = requestAnimationFrame(runAutoScroll);
     }
 
-    // Cuenta atrás y comienzo
+    function startScrollLoop() {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      lastAnimTimestamp = null;
+      animFrameId = requestAnimationFrame(runAutoScroll);
+    }
+
+    function stopScrollLoop() {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      animFrameId = null;
+      lastAnimTimestamp = null;
+    }
+
+    // Rebobinar al principio
+    function rewindText() {
+      scrollPos = 0;
+      prompterBox.scrollTop = 0;
+      showToast('⏮️ Rebobinado al inicio');
+    }
+    btnRewind.addEventListener('click', rewindText);
+
+    // Modo prueba de desplazamiento sin grabar
+    btnTestScroll.addEventListener('click', () => {
+      if (!isTestingScroll) {
+        isTestingScroll = true;
+        isPaused = false;
+        pauseBadge.style.display = 'none';
+        btnTestScroll.innerText = '⏹️ Detener prueba';
+        btnTestScroll.style.background = '#ff3b30';
+        quickSettings.style.display = 'none';
+        startScrollLoop();
+        showToast('▶️ Probando velocidad... Toca para pausar');
+      } else {
+        isTestingScroll = false;
+        stopScrollLoop();
+        btnTestScroll.innerText = '▶️ Probar desplazamiento sin grabar';
+        btnTestScroll.style.background = 'rgba(255, 255, 255, 0.12)';
+        showToast('Prueba detenida');
+      }
+    });
+
+    // Pausar / Reanudar al tocar el texto
+    prompterBox.addEventListener('click', () => {
+      if (isRecording || isTestingScroll) {
+        isPaused = !isPaused;
+        pauseBadge.style.display = isPaused ? 'block' : 'none';
+        showToast(isPaused ? '⏸️ Pausado' : '▶️ Reanudado');
+      }
+    });
+
+    // Cuenta atrás
     function triggerCountdown(callback) {
       countdownOverlay.style.display = 'flex';
       let count = 3;
@@ -575,24 +728,32 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
           countdownOverlay.style.display = 'none';
           callback();
         }
-      }, 900);
+      }, 850);
     }
 
-    // Iniciar grabación
+    // Iniciar Grabación
     async function startRecording() {
       if (!mediaStream) {
         await initCamera();
         if (!mediaStream) {
-          showToast('⚠️ Permite acceso a cámara');
+          showToast('⚠️ Permite acceso a la cámara');
           return;
         }
       }
 
-      // Reset scroll
-      prompterBox.scrollTop = 0;
-      scrollPos = 0;
+      // Detener prueba si estuviera activa
+      if (isTestingScroll) {
+        isTestingScroll = false;
+        btnTestScroll.innerText = '▶️ Probar desplazamiento sin grabar';
+        btnTestScroll.style.background = 'rgba(255, 255, 255, 0.12)';
+      }
 
-      // Seleccionar formato compatible con iOS Safari
+      // Reiniciar texto arriba
+      rewindText();
+      isPaused = false;
+      pauseBadge.style.display = 'none';
+
+      // Detectar formato compatible en iOS
       const mimeTypes = [
         'video/mp4;codecs=avc1',
         'video/mp4',
@@ -619,6 +780,7 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
       mediaRecorder.onstop = () => {
         const type = selectedMimeType || 'video/mp4';
         recordedBlob = new Blob(recordedChunks, { type });
+        if (recordedVideoUrl) URL.revokeObjectURL(recordedVideoUrl);
         recordedVideoUrl = URL.createObjectURL(recordedBlob);
         resultVideo.src = recordedVideoUrl;
         resultModal.style.display = 'flex';
@@ -630,7 +792,7 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
       recordingIndicator.style.display = 'flex';
       quickSettings.style.display = 'none';
 
-      // Temporizador de duración
+      // Temporizador
       recordingSeconds = 0;
       recordingTimeText.innerText = '00:00';
       timerInterval = setInterval(() => {
@@ -640,22 +802,24 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
         recordingTimeText.innerText = `${mins}:${secs}`;
       }, 1000);
 
-      // Iniciar scroll de texto
-      startAutoScroll();
+      // Arrancar loop de scroll
+      startScrollLoop();
     }
 
-    // Parar grabación
+    // Detener Grabación
     function stopRecording() {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
       }
       isRecording = false;
+      stopScrollLoop();
       recordBtn.classList.remove('recording');
       recordingIndicator.style.display = 'none';
+      pauseBadge.style.display = 'none';
       clearInterval(timerInterval);
     }
 
-    // Click en botón de grabación
+    // Pulsar botón grabar
     recordBtn.addEventListener('click', () => {
       if (!isRecording) {
         triggerCountdown(startRecording);
@@ -664,19 +828,21 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
       }
     });
 
-    // Tocar el prompter para pausar/reanudar el scroll durante la grabación
-    prompterBox.addEventListener('click', () => {
-      if (isRecording) {
-        isPaused = !isPaused;
-        showToast(isPaused ? '⏸️ Scroll en pausa' : '▶️ Reanudado');
-      }
-    });
+    // Cerrar modal de resultado y dejar todo listo para la siguiente toma (SIN confirm ni bloqueos)
+    function closeResultModal() {
+      resultModal.style.display = 'none';
+      resultVideo.pause();
+      resultVideo.src = '';
+      rewindText();
+    }
+    btnDiscardVideo.addEventListener('click', closeResultModal);
+    btnCloseResultX.addEventListener('click', closeResultModal);
 
-    // Guardar vídeo directamente al Carrete de iOS (Fotos)
+    // Guardar en Fotos con la hoja nativa de iOS
     btnSaveVideo.addEventListener('click', async () => {
       if (!recordedBlob) return;
       const extension = (selectedMimeType.includes('mp4')) ? 'mp4' : 'webm';
-      const file = new File([recordedBlob], `video_${Date.now()}.${extension}`, { type: recordedBlob.type });
+      const file = new File([recordedBlob], `teleprompter_${Date.now()}.${extension}`, { type: recordedBlob.type });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
@@ -701,16 +867,8 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      showToast('Descargando vídeo...');
+      showToast('Descargando archivo...');
     }
-
-    btnDiscardVideo.addEventListener('click', () => {
-      if (confirm('¿Descartar este vídeo y volver a grabar?')) {
-        resultModal.style.display = 'none';
-        resultVideo.src = '';
-        if (recordedVideoUrl) URL.revokeObjectURL(recordedVideoUrl);
-      }
-    });
 
     // Modal de edición de texto
     btnEditScript.addEventListener('click', () => {
@@ -725,10 +883,10 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
         localStorage.setItem('teleprompter_script', text);
       }
       modalScript.style.display = 'none';
-      prompterBox.scrollTop = 0;
+      rewindText();
     });
 
-    // Ajustes
+    // Ajustes rápidos
     btnToggleSettings.addEventListener('click', () => {
       const isVisible = quickSettings.style.display === 'flex';
       quickSettings.style.display = isVisible ? 'none' : 'flex';
@@ -737,7 +895,6 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
     speedSlider.addEventListener('input', (e) => {
       const val = e.target.value;
       speedVal.innerText = val;
-      scrollSpeed = parseFloat(val) * 0.45;
       localStorage.setItem('teleprompter_speed', val);
     });
 
@@ -751,7 +908,7 @@ El texto está colocado aquí arriba justo para que tus ojos apunten directament
     function showToast(msg) {
       toast.innerText = msg;
       toast.style.opacity = '1';
-      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+      setTimeout(() => { toast.style.opacity = '0'; }, 2200);
     }
   </script>
 </body>
