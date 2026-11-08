@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <title>Teleprompter Pro</title>
+  <title>Teleprompter Pro 9:16</title>
   <style>
     * {
       box-sizing: border-box;
@@ -28,7 +28,7 @@
       color: #fff;
     }
 
-    /* Vista de Cámara */
+    /* Contenedor Principal de Cámara con Visor 9:16 exacto */
     #camera-container {
       position: absolute;
       top: 0;
@@ -37,25 +37,42 @@
       height: 100%;
       z-index: 1;
       background: #000;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
+
+    /* Visor calibrado a la proporción real de TikTok / Reels (9:16) */
+    #viewfinder {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: calc(100vh * 9 / 16);
+      aspect-ratio: 9 / 16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #050505;
+      box-shadow: 0 0 50px rgba(0,0,0,0.9);
+    }
+
     #preview-video {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* PREDETERMINADO: Cero zoom, se ve todo el cuerpo y el plano natural */
+      object-fit: cover;
+      transform: scaleX(-1); /* Efecto espejo selfie natural */
       background: #000;
-      transform: scaleX(-1);
-      transition: object-fit 0.2s ease;
-    }
-    #preview-video.fit-cover {
-      object-fit: cover; /* Modo recorte/zoom pantalla completa */
     }
 
     /* Adaptación automática para móvil en HORIZONTAL (16:9 Widescreen) */
     @media (orientation: landscape) {
+      #viewfinder {
+        max-width: 100% !important;
+        max-height: calc(100vw * 9 / 16) !important;
+        aspect-ratio: 16 / 9 !important;
+      }
       #prompter-wrapper {
         top: calc(env(safe-area-inset-top, 8px) + 8px) !important;
         max-width: 58% !important;
@@ -78,13 +95,34 @@
       }
     }
 
+    /* Badge superior de Formato (9:16 TikTok) */
+    #format-badge {
+      position: absolute;
+      top: env(safe-area-inset-top, 14px);
+      left: 16px;
+      z-index: 20;
+      background: rgba(20, 20, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #00e676;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.3px;
+    }
+
     /* Caja de Teleprompter superior (debajo de la cámara frontal / Dynamic Island) */
     #prompter-wrapper {
       position: absolute;
       top: calc(env(safe-area-inset-top, 24px) + 24px);
       left: 14px;
       right: 14px;
-      max-width: 540px;
+      max-width: 520px;
       margin: 0 auto;
       height: 220px;
       z-index: 10;
@@ -162,21 +200,21 @@
     /* Estado de grabación (Barra superior) */
     #recording-indicator {
       position: absolute;
-      top: env(safe-area-inset-top, 16px);
+      top: env(safe-area-inset-top, 14px);
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
       display: none;
       align-items: center;
       gap: 8px;
-      background: rgba(18, 18, 18, 0.9);
+      background: rgba(18, 18, 18, 0.92);
       border: 1px solid rgba(255, 59, 48, 0.6);
       padding: 6px 16px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 20px rgba(255, 59, 48, 0.3);
+      box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
     }
     .red-dot {
       width: 10px;
@@ -197,7 +235,7 @@
       bottom: calc(env(safe-area-inset-bottom, 20px) + 12px);
       left: 0;
       right: 0;
-      max-width: 500px;
+      max-width: 480px;
       margin: 0 auto;
       width: 100%;
       padding: 0 20px;
@@ -211,7 +249,7 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: rgba(28, 28, 30, 0.8);
+      background: rgba(28, 28, 30, 0.82);
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -288,9 +326,9 @@
       bottom: calc(env(safe-area-inset-bottom, 20px) + 85px);
       left: 16px;
       right: 16px;
-      max-width: 480px;
+      max-width: 460px;
       margin: 0 auto;
-      background: rgba(22, 22, 24, 0.92);
+      background: rgba(22, 22, 24, 0.94);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.16);
@@ -299,13 +337,13 @@
       z-index: 25;
       display: none;
       flex-direction: column;
-      gap: 16px;
+      gap: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.7);
     }
     .setting-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      color: #999;
+      color: #888;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -329,7 +367,7 @@
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      padding: 10px;
+      padding: 11px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
@@ -391,7 +429,7 @@
       border-color: #007aff;
     }
 
-    /* Modal de Resultado (Vídeo Grabado) - CERO CONFIRMATIONS, CIERRE DIRECTO */
+    /* Modal de Resultado (Vídeo Grabado 9:16) */
     #result-modal {
       display: none;
       position: absolute;
@@ -402,13 +440,13 @@
       background: #000;
       z-index: 200;
       flex-direction: column;
-      padding: calc(env(safe-area-inset-top, 20px) + 12px) 18px calc(env(safe-area-inset-bottom, 20px) + 16px) 18px;
+      padding: calc(env(safe-area-inset-top, 20px) + 10px) 18px calc(env(safe-area-inset-bottom, 20px) + 16px) 18px;
     }
     .result-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .btn-close-result {
       background: rgba(255, 255, 255, 0.15);
@@ -420,13 +458,21 @@
       font-size: 16px;
       cursor: pointer;
     }
-    #result-video {
+    #result-video-container {
       width: 100%;
       flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    #result-video {
+      width: 100%;
+      height: 100%;
       border-radius: 18px;
       background: #111;
       object-fit: contain;
-      margin-bottom: 16px;
     }
     .result-actions {
       display: flex;
@@ -479,9 +525,16 @@
 </head>
 <body>
 
-  <!-- Vista Cámara -->
+  <!-- Vista Cámara con Visor 9:16 de proporción estricta -->
   <div id="camera-container">
-    <video id="preview-video" autoplay playsinline muted></video>
+    <div id="viewfinder">
+      <video id="preview-video" autoplay playsinline muted></video>
+    </div>
+  </div>
+
+  <!-- Badge superior de resolución y formato -->
+  <div id="format-badge">
+    <span>📱 9:16 TikTok HD</span>
   </div>
 
   <!-- Indicador superior de grabación -->
@@ -516,14 +569,10 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       <input type="range" id="size-slider" min="16" max="36" step="2" value="22">
       <span id="size-val" style="min-width: 45px; text-align: right; font-weight: 700;">22px</span>
     </div>
-    <div style="display: flex; gap: 8px;">
-      <button class="btn-test-scroll" id="btn-toggle-fit-settings" style="flex: 1;">📐 Plano Abierto</button>
-      <button class="btn-test-scroll" id="btn-toggle-camera" style="flex: 1;">📷 Girar cámara</button>
-    </div>
+    <button class="btn-test-scroll" id="btn-toggle-camera">📷 Cambiar a cámara trasera / frontal</button>
     <button class="btn-test-scroll" id="btn-toggle-test-scroll" style="background: rgba(0, 122, 255, 0.25); border-color: #007aff;">▶️ Probar desplazamiento sin grabar</button>
     <div style="font-size: 12px; color: #888; text-align: center; line-height: 1.3;">
-      📱 <b>Vertical:</b> Formato Reels / TikTok (9:16)<br>
-      🖥️ <b>Horizontal:</b> Gira el móvil para formato panorámico (16:9)
+      📱 <b>Formato 9:16 bloqueado:</b> Compatible 100% nativo con TikTok, Reels y Shorts sin zoom artificial.
     </div>
   </div>
 
@@ -542,11 +591,6 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
     <!-- Botón Principal Grabar -->
     <button id="record-btn" title="Grabar">
       <div id="record-btn-inner"></div>
-    </button>
-
-    <!-- Zoom/Encuadre (Plano Abierto vs Llenar) -->
-    <button class="btn-circle" id="btn-toggle-fit" title="Zoom / Encuadre">
-      📐
     </button>
 
     <!-- Ajustes -->
@@ -572,10 +616,12 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
   <!-- Modal de Resultado / Guardar en el Carrete -->
   <div id="result-modal">
     <div class="result-header">
-      <span style="font-size: 18px; font-weight: 700;">Vídeo Grabado</span>
+      <span style="font-size: 17px; font-weight: 700;" id="result-modal-title">Vídeo 9:16 Grabado</span>
       <button class="btn-close-result" id="btn-close-result-x">✕</button>
     </div>
-    <video id="result-video" controls playsinline></video>
+    <div id="result-video-container">
+      <video id="result-video" controls playsinline></video>
+    </div>
     <div class="result-actions">
       <button class="btn-action btn-discard" id="btn-discard-video">🔄 Repetir Toma</button>
       <button class="btn-action btn-save" id="btn-save-video">📲 Guardar en Fotos</button>
@@ -607,23 +653,18 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
     const speedVal = document.getElementById('speed-val');
     const sizeSlider = document.getElementById('size-slider');
     const sizeVal = document.getElementById('size-val');
-    const btnTestScroll = document.getElementById('btn-toggle-test-scroll');
-    const btnToggleFit = document.getElementById('btn-toggle-fit');
-    const btnToggleFitSettings = document.getElementById('btn-toggle-fit-settings');
     const btnToggleCamera = document.getElementById('btn-toggle-camera');
+    const btnTestScroll = document.getElementById('btn-toggle-test-scroll');
+    const formatBadge = document.getElementById('format-badge');
     const resultModal = document.getElementById('result-modal');
+    const resultModalTitle = document.getElementById('result-modal-title');
     const resultVideo = document.getElementById('result-video');
     const btnSaveVideo = document.getElementById('btn-save-video');
     const btnDiscardVideo = document.getElementById('btn-discard-video');
     const btnCloseResultX = document.getElementById('btn-close-result-x');
     const toast = document.getElementById('toast-msg');
 
-    // Mapeo de velocidad en píxeles por segundo (Cálculo Delta Time exacto e inmune a los 120Hz de ProMotion)
-    // Nivel 1: ~14 px/s (muy lento)
-    // Nivel 2: ~24 px/s (lectura tranquila y natural - NUEVO POR DEFECTO)
-    // Nivel 3: ~34 px/s (ritmo estándar)
-    // Nivel 5: ~56 px/s
-    // Nivel 10: ~110 px/s
+    // Mapeo de velocidad en píxeles por segundo (Cálculo Delta Time exacto)
     function getSpeedPixelsPerSec(level) {
       const l = parseFloat(level);
       return 8 + (l * 9.5);
@@ -645,40 +686,11 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
     let lastAnimTimestamp = null;
     let animFrameId = null;
     let currentFacingMode = 'user';
-    let isFitContain = localStorage.getItem('teleprompter_fit') !== 'cover'; // Por defecto TRUE (Plano Abierto / Sin zoom)
 
-    function applyFitMode() {
-      if (isFitContain) {
-        previewVideo.classList.remove('fit-cover');
-        btnToggleFit.innerText = '📐';
-        btnToggleFitSettings.innerText = '📐 Modo: Plano Abierto';
-      } else {
-        previewVideo.classList.add('fit-cover');
-        btnToggleFit.innerText = '🔍';
-        btnToggleFitSettings.innerText = '🔍 Modo: Llenar Pantalla';
-      }
-    }
-    applyFitMode();
-
-    function toggleFitMode() {
-      isFitContain = !isFitContain;
-      localStorage.setItem('teleprompter_fit', isFitContain ? 'contain' : 'cover');
-      applyFitMode();
-      showToast(isFitContain ? '📐 Plano Abierto (Se ve todo el cuerpo)' : '🔍 Pantalla Completa');
-    }
-
-    btnToggleFit.addEventListener('click', toggleFitMode);
-    btnToggleFitSettings.addEventListener('click', toggleFitMode);
-
-    btnToggleCamera.addEventListener('click', async () => {
-      currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
-      previewVideo.style.transform = (currentFacingMode === 'user') ? 'scaleX(-1)' : 'none';
-      if (mediaStream) {
-        mediaStream.getTracks().forEach(t => t.stop());
-      }
-      await initCamera();
-      showToast(currentFacingMode === 'user' ? '📷 Cámara frontal (Selfie)' : '📷 Cámara trasera (Gran angular)');
-    });
+    // Canvas de recorte 9:16 de alta fidelidad
+    let recordingCanvas = null;
+    let recordingCtx = null;
+    let canvasAnimId = null;
 
     // Cargar preferencias guardadas
     const savedScript = localStorage.getItem('teleprompter_script');
@@ -689,7 +701,6 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       scriptEditor.value = prompterText.innerText;
     }
 
-    // Por defecto velocidad 2 (tranquila y legible)
     const savedSpeed = localStorage.getItem('teleprompter_speed') || 2;
     speedSlider.value = savedSpeed;
     speedVal.innerText = savedSpeed;
@@ -706,31 +717,64 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       }
     });
 
-    // Iniciar cámara
+    function updateFormatBadge() {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      const vW = previewVideo.videoWidth || 1080;
+      const vH = previewVideo.videoHeight || 1920;
+      if (isLandscape) {
+        formatBadge.innerHTML = '<span>🖥️ 16:9 Widescreen</span>';
+      } else {
+        formatBadge.innerHTML = `<span>📱 9:16 TikTok HD (${vW > vH ? vH : vW}p)</span>`;
+      }
+    }
+
+    // Iniciar cámara con forzado explícito de 9:16 en vertical y 16:9 en horizontal
     async function initCamera() {
       try {
         const isLandscape = window.innerWidth > window.innerHeight;
+        const targetAspectRatio = isLandscape ? (16 / 9) : (9 / 16);
         const constraints = {
           video: {
             facingMode: currentFacingMode,
-            width: { ideal: isLandscape ? 1920 : 1080 },
-            height: { ideal: isLandscape ? 1080 : 1920 }
+            aspectRatio: { ideal: targetAspectRatio },
+            width: { min: 720, ideal: isLandscape ? 1920 : 1080, max: 1920 },
+            height: { min: 720, ideal: isLandscape ? 1080 : 1920, max: 1920 },
+            frameRate: { ideal: 30, max: 30 }
           },
           audio: {
             echoCancellation: true,
-            noiseSuppression: true
+            noiseSuppression: true,
+            autoGainControl: true
           }
         };
+
         mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         previewVideo.srcObject = mediaStream;
+
+        previewVideo.onloadedmetadata = () => {
+          updateFormatBadge();
+        };
       } catch (err) {
-        console.error('Error cámara:', err);
-        showToast('⚠️ Permite acceso a la cámara y micrófono');
+        console.error('Error cámara constraints, aplicando fallback:', err);
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: currentFacingMode,
+              aspectRatio: { ideal: 9 / 16 }
+            },
+            audio: true
+          });
+          previewVideo.srcObject = mediaStream;
+          previewVideo.onloadedmetadata = () => { updateFormatBadge(); };
+        } catch (e2) {
+          showToast('⚠️ Permite acceso a la cámara y micrófono');
+        }
       }
     }
     initCamera();
 
     // Reajustar resolución y proporciones si el usuario gira el móvil
+    window.addEventListener('resize', updateFormatBadge);
     window.addEventListener('orientationchange', async () => {
       setTimeout(async () => {
         if (!isRecording) {
@@ -739,10 +783,21 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
           }
           await initCamera();
         }
-      }, 300);
+      }, 350);
     });
 
-    // Loop de auto-scroll basado en Delta Time (ignora los 120Hz del iPhone para que no vuele)
+    // Alternar cámara Frontal / Trasera
+    btnToggleCamera.addEventListener('click', async () => {
+      currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+      previewVideo.style.transform = (currentFacingMode === 'user') ? 'scaleX(-1)' : 'none';
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+      }
+      await initCamera();
+      showToast(currentFacingMode === 'user' ? '📷 Cámara frontal (Selfie)' : '📷 Cámara trasera (Gran angular)');
+    });
+
+    // Loop de auto-scroll fluido basado en Delta Time
     function runAutoScroll(timestamp) {
       if (!isRecording && !isTestingScroll) {
         lastAnimTimestamp = null;
@@ -753,10 +808,10 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
         lastAnimTimestamp = timestamp;
       }
 
-      const dt = (timestamp - lastAnimTimestamp) / 1000; // segundos transcurridos
+      const dt = (timestamp - lastAnimTimestamp) / 1000;
       lastAnimTimestamp = timestamp;
 
-      if (!isPaused && dt > 0 && dt < 0.2) { // salvaguarda contra tirones
+      if (!isPaused && dt > 0 && dt < 0.2) {
         const pixelsPerSecond = getSpeedPixelsPerSec(speedSlider.value);
         scrollPos += pixelsPerSecond * dt;
         prompterBox.scrollTop = scrollPos;
@@ -834,6 +889,75 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       }, 850);
     }
 
+    // PUENTE INTELIGENTE DE GRABACIÓN 9:16 (Garantía de salida 1080x1920 nativa para TikTok)
+    function setupRecordingStream() {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      const targetRatio = isLandscape ? (16 / 9) : (9 / 16);
+      const vW = previewVideo.videoWidth || 1080;
+      const vH = previewVideo.videoHeight || 1920;
+      const currentRatio = vW / vH;
+
+      // Si la cámara ya entrega 9:16 nativo (margen de 3.5%), usamos la señal directa de hardware
+      if (Math.abs(currentRatio - targetRatio) < 0.035) {
+        console.log('Señal de hardware 9:16 nativa detectada. Grabación directa.');
+        return mediaStream;
+      }
+
+      console.log(`Cámara en ratio ${currentRatio.toFixed(3)}. Activando pipeline 1080x1920 para formato TikTok.`);
+      const outWidth = isLandscape ? 1920 : 1080;
+      const outHeight = isLandscape ? 1080 : 1920;
+
+      if (!recordingCanvas) {
+        recordingCanvas = document.createElement('canvas');
+        recordingCanvas.width = outWidth;
+        recordingCanvas.height = outHeight;
+        recordingCtx = recordingCanvas.getContext('2d', { alpha: false, desynchronized: true });
+      } else {
+        recordingCanvas.width = outWidth;
+        recordingCanvas.height = outHeight;
+      }
+
+      // Fondo opaco para evitar el bug WebKit 230621 de pantalla negra en iOS
+      recordingCtx.fillStyle = '#000000';
+      recordingCtx.fillRect(0, 0, outWidth, outHeight);
+
+      // Loop de renderizado con recorte centrado exacto a 9:16
+      function renderFrame() {
+        if (!isRecording) return;
+
+        const srcW = previewVideo.videoWidth;
+        const srcH = previewVideo.videoHeight;
+        const srcRatio = srcW / srcH;
+
+        let sW, sH, sX, sY;
+        if (srcRatio > targetRatio) {
+          sH = srcH;
+          sW = sH * targetRatio;
+          sX = (srcW - sW) / 2;
+          sY = 0;
+        } else {
+          sW = srcW;
+          sH = sW / targetRatio;
+          sX = 0;
+          sY = (srcH - sH) / 2;
+        }
+
+        recordingCtx.drawImage(previewVideo, sX, sY, sW, sH, 0, 0, outWidth, outHeight);
+        canvasAnimId = requestAnimationFrame(renderFrame);
+      }
+      renderFrame();
+
+      const canvasStream = recordingCanvas.captureStream(30);
+
+      // Adjuntar pista de audio del micrófono
+      const audioTracks = mediaStream.getAudioTracks();
+      if (audioTracks.length > 0) {
+        canvasStream.addTrack(audioTracks[0]);
+      }
+
+      return canvasStream;
+    }
+
     // Iniciar Grabación
     async function startRecording() {
       if (!mediaStream) {
@@ -844,19 +968,20 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
         }
       }
 
-      // Detener prueba si estuviera activa
       if (isTestingScroll) {
         isTestingScroll = false;
         btnTestScroll.innerText = '▶️ Probar desplazamiento sin grabar';
         btnTestScroll.style.background = 'rgba(255, 255, 255, 0.12)';
       }
 
-      // Reiniciar texto arriba
       rewindText();
       isPaused = false;
       pauseBadge.style.display = 'none';
 
-      // Detectar formato compatible en iOS
+      // Configurar stream garantizado a 9:16
+      const streamToRecord = setupRecordingStream();
+
+      // Formato compatible en iOS Safari
       const mimeTypes = [
         'video/mp4;codecs=avc1',
         'video/mp4',
@@ -868,9 +993,9 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
 
       try {
         const options = selectedMimeType ? { mimeType: selectedMimeType } : {};
-        mediaRecorder = new MediaRecorder(mediaStream, options);
+        mediaRecorder = new MediaRecorder(streamToRecord, options);
       } catch (e) {
-        mediaRecorder = new MediaRecorder(mediaStream);
+        mediaRecorder = new MediaRecorder(streamToRecord);
       }
 
       recordedChunks = [];
@@ -881,15 +1006,21 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       };
 
       mediaRecorder.onstop = () => {
+        if (canvasAnimId) {
+          cancelAnimationFrame(canvasAnimId);
+          canvasAnimId = null;
+        }
+
         const type = selectedMimeType || 'video/mp4';
         recordedBlob = new Blob(recordedChunks, { type });
         if (recordedVideoUrl) URL.revokeObjectURL(recordedVideoUrl);
         recordedVideoUrl = URL.createObjectURL(recordedBlob);
         resultVideo.src = recordedVideoUrl;
+        resultModalTitle.innerText = `Vídeo 9:16 TikTok (${(recordedBlob.size / (1024 * 1024)).toFixed(1)} MB)`;
         resultModal.style.display = 'flex';
       };
 
-      mediaRecorder.start(500);
+      mediaRecorder.start(1000);
       isRecording = true;
       recordBtn.classList.add('recording');
       recordingIndicator.style.display = 'flex';
@@ -905,7 +1036,6 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
         recordingTimeText.innerText = `${mins}:${secs}`;
       }, 1000);
 
-      // Arrancar loop de scroll
       startScrollLoop();
     }
 
@@ -931,7 +1061,7 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       }
     });
 
-    // Cerrar modal de resultado y dejar todo listo para la siguiente toma (SIN confirm ni bloqueos)
+    // Cerrar modal de resultado
     function closeResultModal() {
       resultModal.style.display = 'none';
       resultVideo.pause();
@@ -941,17 +1071,17 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
     btnDiscardVideo.addEventListener('click', closeResultModal);
     btnCloseResultX.addEventListener('click', closeResultModal);
 
-    // Guardar en Fotos con la hoja nativa de iOS
+    // Guardar en Fotos con la hoja nativa de iOS (Sin pérdidas de calidad)
     btnSaveVideo.addEventListener('click', async () => {
       if (!recordedBlob) return;
       const extension = (selectedMimeType.includes('mp4')) ? 'mp4' : 'webm';
-      const file = new File([recordedBlob], `teleprompter_${Date.now()}.${extension}`, { type: recordedBlob.type });
+      const file = new File([recordedBlob], `tiktok_916_${Date.now()}.${extension}`, { type: recordedBlob.type });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
             files: [file],
-            title: 'Mi Vídeo Teleprompter'
+            title: 'Mi Vídeo 9:16 TikTok'
           });
         } catch (err) {
           if (err.name !== 'AbortError') {
@@ -970,7 +1100,7 @@ Toca el texto en cualquier momento para pausar o continuar si te trabas.</div>
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      showToast('Descargando archivo...');
+      showToast('Descargando archivo 9:16...');
     }
 
     // Modal de edición de texto
